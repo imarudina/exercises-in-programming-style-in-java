@@ -191,6 +191,10 @@ class StopWordManager extends ActiveWFObject {
 			for (String w : content.split(",")) {
 				stopWords.add(w);
 			}
+			
+			for (char ch = 'a'; ch <= 'z'; ch++) {
+				stopWords.add(String.valueOf(ch));
+			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
