@@ -117,26 +117,26 @@ public class Cookbook {
 	 * Creates a list of pairs associating words with frequencies
 	 */
 	private static void frequencies() {
-	    for (String w : words) {
+		for (String w : words) {
 			int index = -1, i = 0;
-	    	for (Object[] entry : word_freqs) {
-	    		if (w.equals(entry[0])) {
-	    			index = i;
-	    			break;
-	    		}
-	    		i++;
-	    	}
-	        if (index != -1) {
-	            word_freqs.set(index, new Object[] { w, ((Integer) word_freqs.get(index)[1]) + 1});
-	        } else { 
-	        	word_freqs.add(new Object[] {w, 1});
-	        }
-	    }
+			for (Object[] entry : word_freqs) {
+				if (w.equals(entry[0])) {
+					index = i;
+					break;
+				}
+				i++;
+			}
+			if (index != -1) {
+				word_freqs.set(index, new Object[] { w, ((Integer) word_freqs.get(index)[1]) + 1 });
+			} else {
+				word_freqs.add(new Object[] { w, 1 });
+			}
+		}
 
 	}
 
 	/**
-	 *  Sorts word_freqs by frequency
+	 * Sorts word_freqs by frequency
 	 */
 	private static void sort() {
 		word_freqs.sort((o1, o2) -> {
