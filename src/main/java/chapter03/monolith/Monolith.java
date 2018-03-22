@@ -1,6 +1,3 @@
-/**
- * 
- */
 package chapter03.monolith;
 
 import java.io.BufferedReader;
