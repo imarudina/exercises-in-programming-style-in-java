@@ -17,11 +17,11 @@ public class CodeGolf {
 			String data = scanner.useDelimiter("\\Z").next().replaceAll("[^a-zA-Z ]+", " ").toLowerCase();
 
 			Set<String> stopWords = new HashSet<>(Arrays.asList(scannerStopWords.useDelimiter("\\Z").next().toLowerCase().split(",")));
-
-			Map<String, Long> wordFreqs = Arrays.asList(data.split("\\s+")).stream().parallel().filter(w -> !stopWords.contains(w))
+			
+			Map<String, Long> wordFreqs = Arrays.asList(data.split("\\s+")).stream().parallel().filter(w -> w.length() > 1 && !stopWords.contains(w))
 					.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 			
-			wordFreqs.entrySet().stream().sorted((e1, e2) ->  e2.getValue().compareTo(e1.getValue()) ).limit(25)
+			wordFreqs.entrySet().stream().sorted((e1, e2) ->  e2.getValue().compareTo(e1.getValue())).limit(25)
 				.forEach(e -> System.out.println(e.getKey() + " - " + e.getValue()));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
