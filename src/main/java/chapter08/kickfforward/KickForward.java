@@ -14,37 +14,37 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class KickForward {
-	
-	private static String stopWordsFileName; // TODO
+
+	private static String stopWordsFileName;
 
 	public static void main(String[] args) {
 		stopWordsFileName = args[1];
 		read_file(args[0], KickForward::filter_chars);
 	}
 
-	static void read_file(String path_to_file, BiConsumer<String, BiConsumer<String, BiConsumer<String, BiConsumer<String[], BiConsumer<String[], BiConsumer<Map<String, Integer>, BiConsumer<List<Entry<String, Integer>>, Consumer<Void>>>>>>>> func) {
+	static void read_file(String path_to_file, BiConsumer<String, BiConsumer> func) {
 		try (Scanner scanner = new Scanner(new File(path_to_file))) {
 			String data = scanner.useDelimiter("\\Z").next().toLowerCase();
-			func.accept(data, KickForward::normalize);
+			func.accept(data, (BiConsumer<String, BiConsumer>) KickForward::normalize);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 	}
 
-	static void filter_chars(String str_data, BiConsumer<String, BiConsumer<String, BiConsumer<String[], BiConsumer<String[], BiConsumer<Map<String, Integer>, BiConsumer<List<Entry<String, Integer>>, Consumer<Void>>>>>>> func) {
-		func.accept(str_data.replaceAll("[^a-zA-Z ]+", " "), KickForward::scan);
+	static void filter_chars(String str_data, BiConsumer<String, BiConsumer> func) {
+		func.accept(str_data.replaceAll("[^a-zA-Z ]+", " "), (BiConsumer<String, BiConsumer>) KickForward::scan);
 	}
 
-	static void normalize(String str_data, BiConsumer<String, BiConsumer<String[], BiConsumer<String[], BiConsumer<Map<String, Integer>, BiConsumer<List<Entry<String, Integer>>, Consumer<Void>>>>>> func) {
-		func.accept(str_data.toLowerCase(), KickForward::remove_stop_words);
+	static void normalize(String str_data, BiConsumer<String, BiConsumer> func) {
+		func.accept(str_data.toLowerCase(), (BiConsumer<String[], BiConsumer>) KickForward::remove_stop_words);
 	}
 
-	static void scan(String str_data, BiConsumer<String[], BiConsumer<String[], BiConsumer<Map<String, Integer>, BiConsumer<List<Entry<String, Integer>>, Consumer<Void>>>>> func) {
-		func.accept(str_data.split("\\s+"), KickForward::frequencies);
+	static void scan(String str_data, BiConsumer<String[], BiConsumer> func) {
+		func.accept(str_data.split("\\s+"), (BiConsumer<String[], BiConsumer>) KickForward::frequencies);
 	}
 
-	static void remove_stop_words(String[] words, BiConsumer<String[], BiConsumer<Map<String, Integer>, BiConsumer<List<Entry<String, Integer>>, Consumer<Void>>>> func) {
+	static void remove_stop_words(String[] words, BiConsumer<String[], BiConsumer> func) {
 		Set<String> stopWords = new HashSet<>();
 		try (Scanner scanner = new Scanner(new File(stopWordsFileName))) {
 			String content = scanner.useDelimiter("\\Z").next().toLowerCase();
@@ -76,10 +76,10 @@ public class KickForward {
 			}
 		}
 
-		func.accept(words_, KickForward::sort);
+		func.accept(words_, (BiConsumer<Map<String, Integer>, BiConsumer>) KickForward::sort);
 	}
 
-	static void frequencies(String[] words, BiConsumer<Map<String, Integer>, BiConsumer<List<Entry<String, Integer>>, Consumer<Void>>> func) {
+	static void frequencies(String[] words, BiConsumer<Map<String, Integer>, BiConsumer> func) {
 		Map<String, Integer> wordFreqs = new HashMap<>();
 
 		for (String word : words) {
@@ -91,16 +91,16 @@ public class KickForward {
 			}
 		}
 
-		func.accept(wordFreqs, KickForward::print_text);
+		func.accept(wordFreqs, (BiConsumer<List<Entry<String, Integer>>, Consumer>) KickForward::print_text);
 	}
 
-	static void sort(Map<String, Integer> wordFreqs, BiConsumer<List<Entry<String, Integer>>, Consumer<Void>> func) {
+	static void sort(Map<String, Integer> wordFreqs, BiConsumer<List<Entry<String, Integer>>, Consumer> func) {
 		List<Entry<String, Integer>> sortedWordFreqs = wordFreqs.entrySet().stream().sorted((o1, o2) -> {
 			int v1 = o1.getValue();
 			int v2 = o2.getValue();
 			return (v1 > v2) ? -1 : ((v1 == v2) ? 0 : 1);
 		}).collect(Collectors.toList());
-		func.accept(sortedWordFreqs, KickForward::no_op);
+		func.accept(sortedWordFreqs, (Consumer<Void>) KickForward::no_op);
 	}
 
 	static void print_text(List<Entry<String, Integer>> sortedWordFreqs, Consumer<Void> func) {
