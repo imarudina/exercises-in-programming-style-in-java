@@ -2,7 +2,9 @@ package chapter02.goforth;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -10,11 +12,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.Stack;
 
 public class GoForth {
 
-	static Stack<Object> stack = new Stack<>();
+	static Deque<Object> stack = new ArrayDeque<>();
 	static Map<String, Object> heap = new HashMap<>();
 
 	public static void main(String args[]) {
